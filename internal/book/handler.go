@@ -28,3 +28,13 @@ func AddBook(w http.ResponseWriter, r *http.Request){
 	}
 	w.WriteHeader(http.StatusInternalServerError)
 }
+
+func GetAllBooks(w http.ResponseWriter, r *http.Request){
+	filter := make(map[string]any)
+	books, err := GetBooks(bookCollection, filter)
+	if err != nil{
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	json.NewEncoder(w).Encode(books)
+	w.WriteHeader(http.StatusOK)
+}
