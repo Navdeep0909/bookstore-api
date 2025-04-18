@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/navdeep0909/bookstore-api/internal/book"
 	"github.com/navdeep0909/bookstore-api/internal/user"
 )
 
@@ -13,6 +14,9 @@ func main(){
 
 	http.HandleFunc("/api/bookstore/signup", user.SignupHandler)
 	http.HandleFunc("/api/bookstore/login", user.LoginHandler)
+
+	//Handler for books
+	http.HandleFunc("/api/bookstore/book", book.AddBook)
 
 	// port := os.Getenv("PORT")
     // if port == "" {
