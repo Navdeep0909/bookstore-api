@@ -46,7 +46,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
 	}
-	var filter map[string]interface{}
+	filter := make(map[string]any)
 	
 	if req.Email != ""{
 		filter["email"] = req.Email
@@ -64,13 +64,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	// JWT token generation
-	expiresAt := time.Now().Add(15 * time.Minute)
-	claims := &jwt.RegisteredClaims{
-		Subject:   dbUser.Id,
-		ExpiresAt: jwt.NewNumericDate(expiresAt),
+	claims := jwt.MapClaims{
+		"sub":  dbUser.Id,
+		"role": dbUser.Role,
+		"exp":  time.Now().Add(15 * time.Minute).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString(jwtKey)
+	signedToken, err := token.SignedString(JwtKey)
 	if err != nil {
 		http.Error(w, "Could not create token", http.StatusInternalServerError)
 		return
