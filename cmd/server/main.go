@@ -18,6 +18,7 @@ func main(){
 	//Handler for books
 	http.HandleFunc("/api/bookstore/book", book.AddBook)
 	http.HandleFunc("/api/bookstore/books", book.GetAllBooks)
+	http.HandleFunc("/api/bookstore/book/{title}", book.GetBookByTitle)
 
 	// port := os.Getenv("PORT")
     // if port == "" {

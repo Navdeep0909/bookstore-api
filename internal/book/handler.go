@@ -2,7 +2,9 @@ package book
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -36,5 +38,22 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request){
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	json.NewEncoder(w).Encode(books)
+	w.WriteHeader(http.StatusOK)
+}
+
+func GetBookByTitle(w http.ResponseWriter, r *http.Request){
+	sliceOfUrlStrings := strings.Split(r.URL.Path, "/")
+	fmt.Println("Printing the length of slice: ", len(sliceOfUrlStrings))
+	title := sliceOfUrlStrings[4]
+	fmt.Println("Printing the value in the title var: ", title)
+	filter := make(map[string]any)
+
+	filter["title"] = title
+	// filter["title"] = {title}
+	book, err := GetBookById(bookCollection, &filter)
+	if err != nil{
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	json.NewEncoder(w).Encode(book)
 	w.WriteHeader(http.StatusOK)
 }
