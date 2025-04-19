@@ -19,6 +19,7 @@ func main(){
 	http.HandleFunc("/api/bookstore/book", book.AddBook)
 	http.HandleFunc("/api/bookstore/books", book.GetAllBooks)
 	http.HandleFunc("/api/bookstore/book/{title}", book.GetBookByTitle)
+	http.HandleFunc("/api/bookstore/book/delete/{title}", book.DeleteBookByTitle)
 
 	// port := os.Getenv("PORT")
     // if port == "" {

@@ -57,3 +57,17 @@ func GetBookByTitle(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(book)
 	w.WriteHeader(http.StatusOK)
 }
+
+func DeleteBookByTitle(w http.ResponseWriter, r *http.Request){
+	sliceOfUrlStrings := strings.Split(r.URL.Path, "/")
+	title := sliceOfUrlStrings[5]
+	filter := make(map[string]any)
+
+	filter["title"] = title
+	// filter["title"] = {title}
+	result := DeleteBookById(bookCollection, &filter)
+	if result == nil{
+		http.Error(w, "Error Occured when trying to delete", http.StatusInternalServerError)
+	}
+	w.WriteHeader(http.StatusOK)
+}

@@ -61,3 +61,15 @@ func UpdateBookInfo(collection string, filter interface{}, updateInfo interface{
 	}
 	return result, nil
 }
+
+func DeleteBookById(collection string, filter interface{}) *mongo.DeleteResult{
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+	bookCollection := user.GetCollection(user.CreateMongoClient(), collection)
+
+	result, err := bookCollection.DeleteOne(ctx, filter)
+	if err != nil{
+		return nil
+	}
+	return result
+}
