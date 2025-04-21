@@ -16,10 +16,11 @@ func main(){
 	http.HandleFunc("/api/bookstore/login", user.LoginHandler)
 
 	//Handler for books
-	http.HandleFunc("/api/bookstore/book", book.AddBook)
-	http.HandleFunc("/api/bookstore/books", book.GetAllBooks)
-	http.HandleFunc("/api/bookstore/book/{title}", book.GetBookByTitle)
-	http.HandleFunc("/api/bookstore/book/delete/{title}", book.DeleteBookByTitle)
+	http.HandleFunc("/api/bookstore/book", book.AddBookHandler)
+	http.HandleFunc("/api/bookstore/books", book.GetAllBooksHandler)
+	http.HandleFunc("/api/bookstore/book/{title}", book.GetBookByTitleHandler)
+	http.HandleFunc("/api/bookstore/book/delete/{title}", book.DeleteBookByTitleHandler)
+	http.HandleFunc("/api/bookstore/book/update", book.UpdateBookByTitleHandler)
 
 	// port := os.Getenv("PORT")
     // if port == "" {

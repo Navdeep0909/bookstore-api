@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/navdeep0909/bookstore-api/internal/user"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -50,12 +51,13 @@ func GetBookById(collection string, filter interface{}) (Book, error){
 	return book, nil
 }
 
-func UpdateBookInfo(collection string, filter interface{}, updateInfo interface{}) (*mongo.UpdateResult, error){
+func UpdateBookInfo(collection string, filter interface{}, updateInfo Book) (*mongo.UpdateResult, error){
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	bookCollection := user.GetCollection(user.CreateMongoClient(), collection)
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "instock", Value: updateInfo.InStock}}}}
 
-	result, err := bookCollection.UpdateOne(ctx, filter, updateInfo)
+	result, err := bookCollection.UpdateOne(ctx, filter, update)
 	if err != nil{
 		return  nil, err
 	}
