@@ -12,15 +12,17 @@ const port = "8080"
 
 func main(){
 
-	http.HandleFunc("/api/bookstore/signup", user.SignupHandler)
-	http.HandleFunc("/api/bookstore/login", user.LoginHandler)
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/api/bookstore/signup", user.SignupHandler)
+	mux.HandleFunc("/api/bookstore/login", user.LoginHandler)
 
 	//Handler for books
-	http.HandleFunc("/api/bookstore/book", book.AddBookHandler)
-	http.HandleFunc("/api/bookstore/books", book.GetAllBooksHandler)
-	http.HandleFunc("/api/bookstore/book/{title}", book.GetBookByTitleHandler)
-	http.HandleFunc("/api/bookstore/book/delete/{title}", book.DeleteBookByTitleHandler)
-	http.HandleFunc("/api/bookstore/book/update", book.UpdateBookByTitleHandler)
+	mux.Handle("/api/bookstore/book", user.JWTAuthMiddleware(user.RequireRole("Admin", http.HandlerFunc(book.AddBookHandler))))
+	mux.HandleFunc("/api/bookstore/books", book.GetAllBooksHandler)
+	mux.HandleFunc("/api/bookstore/book/{title}", book.GetBookByTitleHandler)
+	mux.HandleFunc("/api/bookstore/book/delete/{title}", book.DeleteBookByTitleHandler)
+	mux.HandleFunc("/api/bookstore/book/update", book.UpdateBookByTitleHandler)
 
 	// port := os.Getenv("PORT")
     // if port == "" {
@@ -28,7 +30,7 @@ func main(){
     // }
 
     log.Printf("🚀 Server listening on http://localhost:%s", port)
-    if err := http.ListenAndServe(":"+port, nil); err != nil {
+    if err := http.ListenAndServe(":"+port, mux); err != nil {
         log.Fatalf("Server failed: %v", err)
     }
 
