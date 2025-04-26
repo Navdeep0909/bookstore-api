@@ -75,3 +75,34 @@ func DeleteBookById(collection string, filter interface{}) *mongo.DeleteResult{
 	}
 	return result
 }
+
+// func createBookIndexes(collection *mongo.Collection) error {
+// 	ctx := context.Background()
+
+// 	indexModels := []mongo.IndexModel{
+// 		{
+// 			Keys: bson.D{{Key: "title", Value: "text"}, {Key: "author", Value: "text"}},
+// 			Options: options.Index().SetName("TextIndex"), // For search
+// 		},
+// 		{
+// 			Keys: bson.D{{Key: "genre", Value: 1}},
+// 			Options: options.Index().SetName("GenreIndex"), // For filter
+// 		},
+// 		{
+// 			Keys: bson.D{{Key: "price", Value: 1}},
+// 			Options: options.Index().SetName("PriceIndex"), // For sorting/filtering
+// 		},
+// 		{
+// 			Keys: bson.D{{Key: "created_at", Value: -1}},
+// 			Options: options.Index().SetName("CreatedAtIndex"), // For pagination
+// 		},
+// 	}
+
+// 	_, err := collection.Indexes().CreateMany(ctx, indexModels)
+// 	if err != nil {
+// 		return fmt.Errorf("failed to create indexes: %v", err)
+// 	}
+
+// 	log.Println("✅ Mongo indexes created")
+// 	return nil
+// }

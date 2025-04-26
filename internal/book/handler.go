@@ -32,7 +32,11 @@ func AddBookHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func GetAllBooksHandler(w http.ResponseWriter, r *http.Request){
+	searchString := r.URL.Query().Get("search")
 	filter := make(map[string]any)
+	if searchString != ""{
+		filter["title"] = searchString
+	}
 	books, err := GetBooks(bookCollection, filter)
 	if err != nil{
 		http.Error(w, err.Error(), http.StatusInternalServerError)
