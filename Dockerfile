@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM golang:1.22-alpine
+FROM golang:1.24.1-alpine
 
 # Install CA certificates (needed if calling HTTPS APIs)
 RUN apk update && apk add --no-cache ca-certificates
@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN go build -o main .
+RUN go build -o main ./cmd/server
 
 # Run the binary
 CMD ["./main"]

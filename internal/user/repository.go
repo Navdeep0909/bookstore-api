@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -10,6 +11,8 @@ import (
 )
 
 var connectionString = "mongodb://localhost:27017"
+var uri = os.Getenv("MONGO_URI")
+
 var DB = "BookStore"
 var userCollection = "User"
 
@@ -17,7 +20,13 @@ func CreateMongoClient() *mongo.Client {
 	fmt.Println("Inside the createMongoClient User")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionString))
+	connStr := ""
+	if uri != ""{
+		connStr = uri
+	}else{
+		connStr = connectionString
+	}
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connStr))
 	if err != nil { 
 		fmt.Println("Error connecting to MongoDB:", err)
     	return nil
